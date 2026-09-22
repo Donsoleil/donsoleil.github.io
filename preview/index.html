@@ -5,15 +5,8 @@
 <meta name="theme-color" content="#ffffff">
 <meta property="og:title" content="140.studio">
 <meta property="og:description" content="Design and product innovation agency. California and Dubai.">
-<meta property="og:image" content="https://www.140.studio/img/hero.jpg">
-<style>@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:swap;src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations")}/* light hero: the glass clip sits on a pale ground, so type and buttons go dark */
-.hero.light{background:#dfe6ee;color:var(--ink)}
-.hero.light .ph{background:#dfe6ee}
-.hero.light .wm,.hero.light .st{color:var(--ink)}
-.hero.light .menu,.hero.light .snd{background:var(--ink)}
-.hero.light .menu svg,.hero.light .snd svg{stroke:#fff}
-.hero.light .opts .pill{box-shadow:0 1px 3px rgba(3,4,5,.12)}
-</style>
+<meta property="og:image" content="https://www.140.studio/img/hero-sound.jpg">
+<style>@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:swap;src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations")}</style>
 <style>
 :root{--mono:"SF Mono",ui-monospace,"SFMono-Regular",Menlo,"JetBrains Mono",monospace;--ink:#030405;--mark:#000;--body:#111;--mute:#6b6b6b;--logo:#b8b8b8;--hair:rgba(0,0,0,.14);--g1:#fff;--g2:#fff;--g3:#fff;--grain:0}
 *{box-sizing:border-box}html,body{margin:0;background:#fff;color:var(--ink);font-family:var(--mono);font-weight:400;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -41,7 +34,8 @@ a{color:inherit;text-decoration:none}
 .opts .pill{transition:transform .26s,opacity .26s;opacity:0;transform:translateX(10px)}
 .nav.open .opts .pill{opacity:1;transform:none}
 .nav.open .opts .pill:nth-child(2){transition-delay:.05s}.nav.open .opts .pill:nth-child(3){transition-delay:.1s}
-/* sound: a second circle under the menu; the video starts muted so it can autoplay, one tap turns the sound on */
+/* sound: a second circle under the menu. The page asks for sound on; browsers that refuse get a muted start and the
+   sound comes on at the first tap, click or key press, unless the visitor has already muted it with this button */
 .snd{position:absolute;right:22px;top:calc(50% + 28px);width:36px;height:36px;border-radius:50%;background:#fff;border:0;padding:0;display:grid;place-items:center;cursor:pointer;z-index:4}
 .snd svg{width:16px;height:16px;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .snd .on{display:none}.snd.live .on{display:block}.snd.live .off{display:none}
@@ -74,6 +68,14 @@ footer .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 2
 footer .meta a{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px}
 footer .mark{margin:40px 0 -.16em;padding-left:40px;font:600 clamp(64px,15.4vw,222px)/.92 var(--mono);letter-spacing:-.04em;color:var(--mark);white-space:nowrap;overflow:hidden}
 
+
+/* light hero: the glass clip sits on a pale ground, so type and buttons go dark */
+.hero.light{background:#dfe6ee;color:var(--ink)}
+.hero.light .ph{background:#dfe6ee}
+.hero.light .wm,.hero.light .st{color:var(--ink)}
+.hero.light .menu,.hero.light .snd{background:var(--ink)}
+.hero.light .menu svg,.hero.light .snd svg{stroke:#fff}
+.hero.light .opts .pill{box-shadow:0 1px 3px rgba(3,4,5,.12)}
 
 @media(max-width:1100px){.logos{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.offices .wrap{grid-template-columns:1fr}section{padding:72px 0}}
@@ -146,8 +148,17 @@ var nav=document.getElementById('nav'),btn=document.getElementById('menu');
 btn.addEventListener('click',function(){var o=nav.classList.toggle('open');nav.closest('.hero').classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false');});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&nav.classList.contains('open'))btn.click();});
 
-var snd=document.getElementById('snd');
-snd.addEventListener('click',function(){var on=v.muted;v.muted=!on;snd.classList.toggle('live',on);snd.setAttribute('aria-pressed',on?'true':'false');snd.setAttribute('aria-label',on?'Sound on':'Sound off');if(on&&v.paused)v.play();});
+var snd=document.getElementById('snd'),chose=false;
+function paint(){var on=!v.muted;snd.classList.toggle('live',on);snd.setAttribute('aria-pressed',on?'true':'false');snd.setAttribute('aria-label',on?'Sound on':'Sound off');}
+v.addEventListener('volumechange',paint);
+snd.addEventListener('click',function(e){e.stopPropagation();chose=true;v.muted=!v.muted;if(!v.muted&&v.paused)v.play();paint();});
+function unlock(e){if(e&&e.target&&e.target.closest&&e.target.closest('#snd'))return;off();if(chose||!v.muted)return;v.muted=false;var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;v.play();});paint();}
+function off(){['pointerdown','keydown','touchend'].forEach(function(t){document.removeEventListener(t,unlock,true);});}
+if(!reduce){
+  v.muted=false;var tp=v.play();
+  if(tp&&tp.catch){tp.then(paint).catch(function(){v.muted=true;v.play();paint();['pointerdown','keydown','touchend'].forEach(function(t){document.addEventListener(t,unlock,true);});});}
+}
+paint();
 
 /* Decrypting statement. Two four-line statements. Every changing character starts
    scrambling at once, then locks in from left to right, line by line. Spaces never
