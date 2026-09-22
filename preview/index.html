@@ -6,7 +6,14 @@
 <meta property="og:title" content="140.studio">
 <meta property="og:description" content="Design and product innovation agency. California and Dubai.">
 <meta property="og:image" content="https://www.140.studio/img/hero.jpg">
-<style>@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:swap;src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations")}</style>
+<style>@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:swap;src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations")}/* light hero: the glass clip sits on a pale ground, so type and buttons go dark */
+.hero.light{background:#dfe6ee;color:var(--ink)}
+.hero.light .ph{background:#dfe6ee}
+.hero.light .wm,.hero.light .st{color:var(--ink)}
+.hero.light .menu,.hero.light .snd{background:var(--ink)}
+.hero.light .menu svg,.hero.light .snd svg{stroke:#fff}
+.hero.light .opts .pill{box-shadow:0 1px 3px rgba(3,4,5,.12)}
+</style>
 <style>
 :root{--mono:"SF Mono",ui-monospace,"SFMono-Regular",Menlo,"JetBrains Mono",monospace;--ink:#030405;--mark:#000;--body:#111;--mute:#6b6b6b;--logo:#b8b8b8;--hair:rgba(0,0,0,.14);--g1:#fff;--g2:#fff;--g3:#fff;--grain:0}
 *{box-sizing:border-box}html,body{margin:0;background:#fff;color:var(--ink);font-family:var(--mono);font-weight:400;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -86,11 +93,10 @@ footer .mark{padding:0;text-align:center;font-size:13.4vw;margin-top:34px}
 }
 </style></head><body>
 <main>
-<header class="hero">
+<header class="hero light">
 <div class="ph"></div>
-<video id="hero" autoplay muted loop playsinline preload="auto" poster="img/hero.jpg" aria-hidden="true">
-<source src="img/hero-loop.mp4" type="video/mp4">
-<source src="img/hero.mp4" type="video/mp4">
+<video id="hero" autoplay muted loop playsinline preload="auto" poster="img/hero-sound.jpg" aria-hidden="true">
+<source src="img/hero-sound.mp4" type="video/mp4">
 </video>
 <p class="wm">~/STUDIO140</p>
 <h1 class="st" id="st"><span class="sr">Design and product innovation agency. Products people feel good using. Built AI first.</span></h1>
