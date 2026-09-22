@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>140.studio</title>
+<meta name="description" content="140.studio is a design and product innovation agency in California and Dubai. Products people feel good using, built AI first.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="140.studio">
+<meta property="og:description" content="Design and product innovation agency. California and Dubai.">
+<meta property="og:image" content="https://www.140.studio/img/hero.jpg">
+<style>@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:swap;src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format("woff2-variations")}</style>
+<style>
+:root{--mono:"SF Mono",ui-monospace,"SFMono-Regular",Menlo,"JetBrains Mono",monospace;--ink:#030405;--mark:#000;--body:#111;--mute:#6b6b6b;--logo:#b8b8b8;--hair:rgba(0,0,0,.14);--g1:#fff;--g2:#fff;--g3:#fff;--grain:0}
+*{box-sizing:border-box}html,body{margin:0;background:#fff;color:var(--ink);font-family:var(--mono);font-weight:400;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.pill{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 16px;border-radius:9999px;background:#fff;color:var(--ink);font:500 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.pill.dark{background:var(--ink);color:#fff}
+
+/* hero: inset card, 20px from the page edges, 48px radius, fills the first screen */
+.hero{position:relative;margin:20px;height:calc(100vh - 40px);height:calc(100svh - 40px);min-height:560px;border-radius:48px;overflow:hidden;background:#6d5c48;color:#fff}
+.hero .ph{position:absolute;inset:0;background:radial-gradient(120% 80% at 70% 10%,#d9b98a 0,#8a6a4a 40%,#3b2e22 100%)}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+/* wordmark: SF Mono semibold 22/44, -4%, white */
+.wm{position:absolute;left:40px;top:20px;margin:0;font:600 22px/44px var(--mono);letter-spacing:-.04em;color:#fff;z-index:3}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.st{position:absolute;left:40px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;margin:0;font:400 clamp(22px,2.9vw,42px)/1.05 var(--mono);letter-spacing:-.04em;text-transform:uppercase;white-space:pre;color:#fff;z-index:3}
+.st .l{display:block;min-height:1.05em}
+.st i{font-style:normal}
+/* menu: circle at the vertical centre on the right; the three options appear to its left on tap */
+.nav{position:absolute;right:22px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:10px;z-index:4}
+.menu{width:36px;height:36px;border-radius:50%;background:#fff;border:0;padding:0;display:grid;place-items:center;cursor:pointer;flex:none}
+.menu svg{width:16px;height:16px;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;fill:none}
+.menu .x{display:none}.nav.open .menu .x{display:block}.nav.open .menu .h{display:none}
+.opts{display:flex;flex-direction:column;align-items:flex-end;gap:8px;opacity:0;transform:translateX(8px);pointer-events:none;transition:opacity .22s,transform .22s}
+.nav.open .opts{opacity:1;transform:none;pointer-events:auto}
+.opts .pill{transition:transform .26s,opacity .26s;opacity:0;transform:translateX(10px)}
+.nav.open .opts .pill{opacity:1;transform:none}
+.nav.open .opts .pill:nth-child(2){transition-delay:.05s}.nav.open .opts .pill:nth-child(3){transition-delay:.1s}
+/* sound: a second circle under the menu; the video starts muted so it can autoplay, one tap turns the sound on */
+.snd{position:absolute;right:22px;top:calc(50% + 28px);width:36px;height:36px;border-radius:50%;background:#fff;border:0;padding:0;display:grid;place-items:center;cursor:pointer;z-index:4}
+.snd svg{width:16px;height:16px;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.snd .on{display:none}.snd.live .on{display:block}.snd.live .off{display:none}
+
+/* ground for everything after the hero: plain white */
+.ground{position:relative;background:linear-gradient(180deg,var(--g1) 0%,var(--g2) 45%,var(--g3) 100%);overflow:hidden;text-transform:uppercase}
+.ground::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");mix-blend-mode:multiply;opacity:var(--grain);pointer-events:none}
+.wrap{position:relative;z-index:1;width:min(1180px,100% - 80px);margin-inline:auto}
+section{padding:104px 0}
+h2{margin:0;font:400 clamp(26px,2.9vw,42px)/1.05 var(--mono);letter-spacing:-.04em;max-width:26ch;color:var(--ink)}
+p{margin:0;color:var(--body);font-size:13px;letter-spacing:.02em;max-width:52ch}
+.intro p{margin-top:18px}
+
+/* clients: an open 6 by 3 grid, no lines, no fill, every mark the same size in light grey.
+   Eight cells hold SVG marks, ten hold names still waiting on brand files. Everything
+   reveals left to right when the grid scrolls into view, then cells keep trading
+   places: names decrypt out and in, marks wipe out and in (see script). */
+.logos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr)}
+.logos li{display:grid;place-items:center;height:104px;color:var(--logo);font:500 12px/1 var(--mono);letter-spacing:.12em;text-align:center;padding:0 12px;white-space:pre}
+.logos img{display:block;width:84px;height:30px;object-fit:contain;clip-path:inset(0 0 0 0);transition:clip-path .55s linear}
+.logos img.hid{clip-path:inset(0 100% 0 0)}
+.logos img.gone{clip-path:inset(0 0 0 100%)}
+
+.offices .wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end}
+.offices .city{font:500 clamp(28px,4vw,56px)/1 var(--mono);letter-spacing:-.02em}
+.offices .city small{display:block;font:400 12px/1 var(--mono);letter-spacing:.08em;color:var(--mute);margin-bottom:12px}
+
+footer{position:relative;z-index:1;padding:22px 0 0}
+footer .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;font-size:12px;color:var(--mute);letter-spacing:.06em}
+footer .meta a{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px}
+footer .mark{margin:40px 0 -.16em;padding-left:40px;font:600 clamp(64px,15.4vw,222px)/.92 var(--mono);letter-spacing:-.04em;color:var(--mark);white-space:nowrap;overflow:hidden}
+
+
+@media(max-width:1100px){.logos{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.offices .wrap{grid-template-columns:1fr}section{padding:72px 0}}
+/* phone: hero flush to the top and sides with rounded bottom corners and a sliver of white below,
+   34px gutter for everything else, wordmark and statement centred on the card
+   (the statement fades while the menu is open), everything below the hero centred, clients 3 up */
+@media(max-width:640px){
+.hero{margin:0 0 24px;height:calc(100svh - 24px);min-height:520px;border-radius:0 0 32px 32px}
+.wm{left:0;right:0;top:14px;font-size:18px;text-align:center}.nav{right:14px}.snd{right:14px}
+.st{left:24px;right:24px;align-items:center;text-align:center;transition:opacity .25s}.hero.open .st{opacity:0}
+.wrap{width:calc(100% - 68px)}
+.intro{text-align:center}.intro h2,.intro p{margin-inline:auto}
+.logos{grid-template-columns:repeat(3,1fr)}.logos li{height:72px;font-size:9px;letter-spacing:.1em;padding:0 4px}.logos img{width:64px;height:24px}
+.offices .wrap{text-align:center;gap:40px}
+footer .meta{flex-direction:column;align-items:center;text-align:center;gap:10px}
+footer .mark{padding:0;text-align:center;font-size:13.4vw;margin-top:34px}
+}
+</style></head><body>
+<main>
+<header class="hero">
+<div class="ph"></div>
+<video id="hero" autoplay muted loop playsinline preload="auto" poster="img/hero.jpg" aria-hidden="true">
+<source src="img/hero-loop.mp4" type="video/mp4">
+<source src="img/hero.mp4" type="video/mp4">
+</video>
+<p class="wm">~/STUDIO140</p>
+<h1 class="st" id="st"><span class="sr">Design and product innovation agency. Products people feel good using. Built AI first.</span></h1>
+<nav class="nav" id="nav">
+<div class="opts">
+<a class="pill" href="mailto:amina@140.studio?subject=Brief%20for%20140">Brief us</a>
+<a class="pill" href="#offices">California</a>
+<a class="pill" href="#offices">Dubai</a>
+</div>
+<button class="menu" id="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 16 16"><path class="h" d="M2 4h12M2 8h9M2 12h12"/><path class="x" d="M3 3l10 10M13 3L3 13"/></svg></button>
+</nav>
+<button class="snd" id="snd" aria-label="Sound off" aria-pressed="false"><svg viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2z"/><path class="on" d="M11.5 5.5a3.5 3.5 0 0 1 0 5M13.5 3.5a6 6 0 0 1 0 9"/><path class="off" d="M11 6l4 4M15 6l-4 4"/></svg></button>
+</header>
+
+<div class="ground">
+<section class="intro"><div class="wrap">
+<h2>We design products, and the intelligence inside them.</h2>
+<p>Strategy, interface, working prototypes, and the models that run them. AI in every step. A person on every decision.</p>
+</div></section>
+
+<section class="clients"><div class="wrap">
+<ul class="logos" aria-label="Clients">
+<li><img src="img/logos/mini.svg" alt="MINI"></li><li><img src="img/logos/nissan.svg" alt="Nissan"></li><li><img src="img/logos/infiniti.svg" alt="Infiniti"></li><li><img src="img/logos/hyundai.svg" alt="Hyundai"></li><li class="n">AMAZON</li><li class="n">WALMART</li>
+<li class="n">TWITTER</li><li><img src="img/logos/pinterest.svg" alt="Pinterest"></li><li class="n">BLOCK</li><li><img src="img/logos/square.svg" alt="Square"></li><li><img src="img/logos/cashapp.svg" alt="Cash App"></li><li class="n">L’ORÉAL</li>
+<li class="n">MAYBELLINE</li><li class="n">LA ROCHE-POSAY</li><li class="n">GARNIER</li><li><img src="img/logos/activision.svg" alt="Activision"></li><li class="n">BLIZZARD</li><li class="n">ALEXA</li>
+</ul>
+</div></section>
+
+<section class="offices" id="offices"><div class="wrap">
+<div class="city"><small>Office 01</small>California</div>
+<div class="city"><small>Office 02</small>Dubai</div>
+</div></section>
+
+<footer>
+<div class="wrap meta"><a href="mailto:amina@140.studio?subject=Brief%20for%20140">Say hello!</a><span>Design and product innovation</span><span>California · Dubai</span><span>© 2026</span></div>
+<div class="mark" aria-hidden="true">~/STUDIO140</div>
+</footer>
+</div>
+</main>
+<script>
+(function(){
+var v=document.getElementById('hero');
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(v&&reduce){v.removeAttribute('autoplay');v.pause();}
+
+var nav=document.getElementById('nav'),btn=document.getElementById('menu');
+btn.addEventListener('click',function(){var o=nav.classList.toggle('open');nav.closest('.hero').classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&nav.classList.contains('open'))btn.click();});
+
+var snd=document.getElementById('snd');
+snd.addEventListener('click',function(){var on=v.muted;v.muted=!on;snd.classList.toggle('live',on);snd.setAttribute('aria-pressed',on?'true':'false');snd.setAttribute('aria-label',on?'Sound on':'Sound off');if(on&&v.paused)v.play();});
+
+/* Decrypting statement. Two four-line statements. Every changing character starts
+   scrambling at once, then locks in from left to right, line by line. Spaces never
+   scramble and characters that become spaces clear at once, so the new word shapes
+   read before the letters do. No colour change, no glow. */
+var A=["DESIGN AND","PRODUCT","INNOVATION","AGENCY"];
+var B=["PRODUCTS PEOPLE","FEEL GOOD","USING.","BUILT AI FIRST."];
+var GL="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+var HOLD=3800,TICK=40,STEP=46,LINE=160;
+var st=document.getElementById('st'),rows=[],N=[];
+for(var i=0;i<4;i++){N[i]=Math.max(A[i].length,B[i].length);var l=document.createElement('span');l.className='l';l.setAttribute('aria-hidden','true');var cells=[];for(var j=0;j<N[i];j++){var c=document.createElement('i');c.textContent=' ';l.appendChild(c);cells.push(c);}rows.push(cells);st.appendChild(l);}
+function pad(s,n){while(s.length<n)s+=' ';return s}
+function show(T){for(var i=0;i<4;i++){var t=pad(T[i],N[i]);for(var j=0;j<N[i];j++)rows[i][j].textContent=j<T[i].length?t[j]:'';}}
+if(reduce){show(A);return;}
+var timer=null;
+function morph(T,done){
+  var plan=[];
+  for(var i=0;i<4;i++){var t=pad(T[i],N[i]),rank=0;
+    for(var j=0;j<N[i];j++){var cur=rows[i][j].textContent,tg=t[j];
+      if(j>=T[i].length){rows[i][j].textContent='';continue;}
+      if(cur===tg&&tg===' ')continue;
+      if(tg===' '){rows[i][j].textContent=' ';continue;}
+      plan.push({el:rows[i][j],tg:tg,lock:i*LINE+rank*STEP});rank++;}
+  }
+  var t0=performance.now();clearInterval(timer);
+  timer=setInterval(function(){var el=performance.now()-t0,left=0;
+    for(var k=0;k<plan.length;k++){var p=plan[k];if(p.done)continue;
+      if(el>=p.lock){p.el.textContent=p.tg;p.done=true;continue;}
+      left++;
+      p.el.textContent=GL[Math.floor(Math.random()*GL.length)];}
+    if(!left){clearInterval(timer);timer=null;done&&done();}
+  },TICK);
+}
+var cur=A;
+function cycle(){morph(cur,function(){setTimeout(function(){cur=cur===A?B:A;cycle();},HOLD);});}
+setTimeout(cycle,400);
+
+/* Client grid. Names reveal with the hero's decrypt (scramble at once, lock in
+   left to right); marks wipe in left to right. Once revealed, every 2.6 s two cells
+   trade contents, whatever they hold. Timing is the hero's plus thirty percent. */
+var GSTEP=44,GDUR=550;
+var grid=document.querySelector('.logos');
+var cells=[].slice.call(grid.children);
+var content=cells.map(function(c){var im=c.querySelector('img');return im?{img:im}:{text:c.textContent}});
+cells.forEach(function(c,i){if(content[i].img){content[i].img.classList.add('hid');}else{c.textContent='';}});
+function decrypt(el,to,delay,done){
+  var from=el.textContent,n=Math.max(from.length,to.length),T=pad(to,n),F=pad(from,n),plan=[],rank=0;
+  for(var j=0;j<n;j++){if(F[j]===T[j])continue;plan.push({j:j,lock:delay+rank*GSTEP});rank++;}
+  var out=F.split(''),t0=performance.now();
+  var id=setInterval(function(){var e=performance.now()-t0,left=0;
+    for(var k=0;k<plan.length;k++){var q=plan[k];if(q.done)continue;
+      if(e>=q.lock){out[q.j]=T[q.j];q.done=true;continue;}
+      left++;if(e>=delay)out[q.j]=GL[Math.floor(Math.random()*GL.length)];}
+    el.textContent=out.join('').replace(/\s+$/,'');
+    if(!left){clearInterval(id);done&&done();}
+  },TICK);
+}
+function enter(i,ct,done){var c=cells[i];
+  if(ct.text){decrypt(c,ct.text,0,done);return;}
+  var im=ct.img;im.className='hid';c.textContent='';c.appendChild(im);void im.offsetWidth;im.classList.remove('hid');setTimeout(done,GDUR+40);
+}
+function exit(i,done){var c=cells[i],ct=content[i];
+  if(ct.text){decrypt(c,'',0,done);return;}
+  ct.img.classList.add('gone');setTimeout(function(){if(ct.img.parentNode===c)c.removeChild(ct.img);done();},GDUR+40);
+}
+var seen=false,ready=false,vis=false,busy=false;
+function reveal(){if(seen)return;seen=true;
+  cells.forEach(function(c,i){setTimeout(function(){
+    if(content[i].text)decrypt(c,content[i].text,0);else content[i].img.classList.remove('hid');
+  },300+i*156);});
+  setTimeout(function(){ready=true;},300+cells.length*156+1200);
+}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis)reveal();},{threshold:.3}).observe(grid);}else{vis=true;reveal();}
+setInterval(function(){
+  if(!ready||!vis||busy||document.hidden)return;busy=true;
+  var a=Math.floor(Math.random()*cells.length),b=(a+1+Math.floor(Math.random()*(cells.length-1)))%cells.length;
+  var ca=content[a],cb=content[b],left=2;
+  function swapped(){if(--left)return;content[a]=cb;content[b]=ca;var l2=2;function fin(){if(!--l2)busy=false}enter(a,cb,fin);enter(b,ca,fin);}
+  exit(a,swapped);exit(b,swapped);
+},2600);
+})();
+</script>
+</body></html>
