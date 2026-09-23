@@ -62,11 +62,15 @@ p{margin:0;color:var(--body);font-size:13px;letter-spacing:.02em;max-width:52ch}
 .offices .wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end}
 .offices .city{font:500 clamp(28px,4vw,56px)/1 var(--mono);letter-spacing:-.02em}
 .offices .city small{display:block;font:400 12px/1 var(--mono);letter-spacing:.08em;color:var(--mute);margin-bottom:12px}
+.offices .nm{display:block;min-height:1em;white-space:pre}
 
 footer{position:relative;z-index:1;padding:22px 0 0}
 footer .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;font-size:12px;color:var(--mute);letter-spacing:.06em}
 footer .meta a{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px}
-footer .mark{margin:40px 0 -.16em;padding-left:40px;font:600 clamp(64px,15.4vw,222px)/.92 var(--mono);letter-spacing:-.04em;color:var(--mark);white-space:nowrap;overflow:hidden}
+footer .mark{margin:40px 0 -.16em;padding-left:40px;font:600 clamp(73px,17.6vw,253px)/.92 var(--mono);letter-spacing:-.04em;color:var(--mark);white-space:nowrap;overflow:hidden}
+/* the 0 of 140 is a filled pixel heart, cap height tall, in a fixed cell so the glitch glyphs never move the line */
+footer .mark .hc{display:inline-block;width:.92em;text-align:center}
+footer .mark svg{display:inline-block;width:.81em;height:.72em;fill:currentColor;shape-rendering:crispEdges}
 
 
 /* light hero: the glass clip sits on a pale ground, so type and buttons go dark */
@@ -92,7 +96,7 @@ footer .mark{margin:40px 0 -.16em;padding-left:40px;font:600 clamp(64px,15.4vw,2
 .logos{grid-template-columns:repeat(3,1fr)}.logos li{height:72px;font-size:9px;letter-spacing:.1em;padding:0 4px}.logos img{width:64px;height:24px}
 .offices .wrap{text-align:center;gap:40px}
 footer .meta{flex-direction:column;align-items:center;text-align:center;gap:10px}
-footer .mark{padding:0;text-align:center;font-size:13.4vw;margin-top:34px}
+footer .mark{padding:0;text-align:center;font-size:15.3vw;margin-top:34px}
 }
 </style></head><body>
 <main>
@@ -129,13 +133,13 @@ footer .mark{padding:0;text-align:center;font-size:13.4vw;margin-top:34px}
 </div></section>
 
 <section class="offices" id="offices"><div class="wrap">
-<div class="city"><small>Office 01</small>California</div>
-<div class="city"><small>Office 02</small>Dubai</div>
+<div class="city"><small>Office 01</small><span class="sr">California</span><span class="nm" aria-hidden="true">California</span></div>
+<div class="city"><small>Office 02</small><span class="sr">Dubai</span><span class="nm" aria-hidden="true">Dubai</span></div>
 </div></section>
 
 <footer>
 <div class="wrap meta"><a href="mailto:amina@140.studio?subject=Brief%20for%20140">Say hello!</a><span>Design and product innovation</span><span>California · Dubai</span><span>© 2026</span></div>
-<div class="mark" aria-hidden="true">~/STUDIO140</div>
+<div class="mark" aria-hidden="true"><span class="mt">STUDIO14</span><span class="hc"><svg viewBox="0 0 9 8" aria-hidden="true"><path d="M1 0h2v1H1zM6 0h2v1H6zM0 1h4v1H0zM5 1h4v1H5zM0 2h9v2H0zM1 4h7v1H1zM2 5h5v1H2zM3 6h3v1H3zM4 7h1v1H4z"/></svg></span></div>
 </footer>
 </div>
 </main>
@@ -205,9 +209,9 @@ var grid=document.querySelector('.logos');
 var cells=[].slice.call(grid.children);
 var content=cells.map(function(c){var im=c.querySelector('img');return im?{img:im}:{text:c.textContent}});
 cells.forEach(function(c,i){if(content[i].img){content[i].img.classList.add('hid');}else{c.textContent='';}});
-function decrypt(el,to,delay,done){
+function decrypt(el,to,delay,done,all){
   var from=el.textContent,n=Math.max(from.length,to.length),T=pad(to,n),F=pad(from,n),plan=[],rank=0;
-  for(var j=0;j<n;j++){if(F[j]===T[j])continue;plan.push({j:j,lock:delay+rank*GSTEP});rank++;}
+  for(var j=0;j<n;j++){if(F[j]===T[j]&&!(all&&T[j]!==' '))continue;plan.push({j:j,lock:delay+rank*GSTEP});rank++;}
   var out=F.split(''),t0=performance.now();
   var id=setInterval(function(){var e=performance.now()-t0,left=0;
     for(var k=0;k<plan.length;k++){var q=plan[k];if(q.done)continue;
@@ -239,6 +243,30 @@ setInterval(function(){
   var ca=content[a],cb=content[b],left=2;
   function swapped(){if(--left)return;content[a]=cb;content[b]=ca;var l2=2;function fin(){if(!--l2)busy=false}enter(a,cb,fin);enter(b,ca,fin);}
   exit(a,swapped);exit(b,swapped);
+},2600);
+
+/* Offices and footer mark. Same decrypt as the client names: California and Dubai
+   decrypt in when they scroll into view, the mark decrypts STUDIO14 and the heart
+   locks in last. After that, on the grid's 2.6 s beat, the cities and the heart
+   take turns to glitch and settle back. */
+function seen2(el,cb){var st={on:false,once:false};
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){st.on=es[0].isIntersecting;if(st.on&&!st.once){st.once=true;cb();}},{threshold:.3}).observe(el);}
+  else{st.on=true;st.once=true;cb();}
+  return st;}
+var names=[].slice.call(document.querySelectorAll('.offices .nm')),words=names.map(function(n){return n.textContent});
+names.forEach(function(n){n.textContent='';});
+var mark=document.querySelector('footer .mark'),mt=mark.querySelector('.mt'),hc=mark.querySelector('.hc'),heart=hc.querySelector('svg'),mword=mt.textContent;
+mt.textContent='';hc.textContent='';
+function heartIn(delay,done){var t0=performance.now();
+  var id=setInterval(function(){if(performance.now()-t0>=delay){clearInterval(id);hc.textContent='';hc.appendChild(heart);done&&done();return;}
+    hc.textContent=GL[Math.floor(Math.random()*GL.length)];},TICK);}
+var ov=seen2(names[0].closest('.offices'),function(){names.forEach(function(n,i){setTimeout(function(){decrypt(n,words[i],0);},300+i*156);});});
+var fv=seen2(mark,function(){setTimeout(function(){decrypt(mt,mword,0);heartIn(mword.length*GSTEP);},300);});
+var beat=0,lbusy=false;
+setInterval(function(){
+  if(document.hidden||lbusy)return;var k=beat++%3;
+  if(k<2&&ov.once&&ov.on){lbusy=true;decrypt(names[k],words[k],0,function(){lbusy=false},true);}
+  else if(k===2&&fv.once&&fv.on){lbusy=true;heartIn(GSTEP*8,function(){lbusy=false});}
 },2600);
 })();
 </script>
