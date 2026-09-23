@@ -209,9 +209,12 @@ var grid=document.querySelector('.logos');
 var cells=[].slice.call(grid.children);
 var content=cells.map(function(c){var im=c.querySelector('img');return im?{img:im}:{text:c.textContent}});
 cells.forEach(function(c,i){if(content[i].img){content[i].img.classList.add('hid');}else{c.textContent='';}});
-function decrypt(el,to,delay,done,all){
+/* o (optional): all re-scrambles letters that already match, hold keeps the whole
+   word scrambling before the first letter locks, step and tick override the pace */
+function decrypt(el,to,delay,done,o){
+  o=o||{};var all=o.all,step=o.step||GSTEP,hold=o.hold||0;
   var from=el.textContent,n=Math.max(from.length,to.length),T=pad(to,n),F=pad(from,n),plan=[],rank=0;
-  for(var j=0;j<n;j++){if(F[j]===T[j]&&!(all&&T[j]!==' '))continue;plan.push({j:j,lock:delay+rank*GSTEP});rank++;}
+  for(var j=0;j<n;j++){if(F[j]===T[j]&&!(all&&T[j]!==' '))continue;plan.push({j:j,lock:delay+hold+rank*step});rank++;}
   var out=F.split(''),t0=performance.now();
   var id=setInterval(function(){var e=performance.now()-t0,left=0;
     for(var k=0;k<plan.length;k++){var q=plan[k];if(q.done)continue;
@@ -219,7 +222,7 @@ function decrypt(el,to,delay,done,all){
       left++;if(e>=delay)out[q.j]=GL[Math.floor(Math.random()*GL.length)];}
     el.textContent=out.join('').replace(/\s+$/,'');
     if(!left){clearInterval(id);done&&done();}
-  },TICK);
+  },o.tick||TICK);
 }
 function enter(i,ct,done){var c=cells[i];
   if(ct.text){decrypt(c,ct.text,0,done);return;}
@@ -248,7 +251,9 @@ setInterval(function(){
 /* Offices and footer mark. Same decrypt as the client names: California and Dubai
    decrypt in when they scroll into view, the mark decrypts STUDIO14 and the heart
    locks in last. After that, on the grid's 2.6 s beat, the cities and the heart
-   take turns to glitch and settle back. */
+   take turns to glitch and settle back. A city glitch is slower than the grid's:
+   the whole word scrambles for 0.9 s, then letters lock in 120 ms apart. */
+var CITY={all:true,hold:900,step:120,tick:70};
 function seen2(el,cb){var st={on:false,once:false};
   if('IntersectionObserver' in window){new IntersectionObserver(function(es){st.on=es[0].isIntersecting;if(st.on&&!st.once){st.once=true;cb();}},{threshold:.3}).observe(el);}
   else{st.on=true;st.once=true;cb();}
@@ -260,12 +265,12 @@ mt.textContent='';hc.textContent='';
 function heartIn(delay,done){var t0=performance.now();
   var id=setInterval(function(){if(performance.now()-t0>=delay){clearInterval(id);hc.textContent='';hc.appendChild(heart);done&&done();return;}
     hc.textContent=GL[Math.floor(Math.random()*GL.length)];},TICK);}
-var ov=seen2(names[0].closest('.offices'),function(){names.forEach(function(n,i){setTimeout(function(){decrypt(n,words[i],0);},300+i*156);});});
+var ov=seen2(names[0].closest('.offices'),function(){names.forEach(function(n,i){setTimeout(function(){decrypt(n,words[i],0,null,CITY);},300+i*156);});});
 var fv=seen2(mark,function(){setTimeout(function(){decrypt(mt,mword,0);heartIn(mword.length*GSTEP);},300);});
 var beat=0,lbusy=false;
 setInterval(function(){
   if(document.hidden||lbusy)return;var k=beat++%3;
-  if(k<2&&ov.once&&ov.on){lbusy=true;decrypt(names[k],words[k],0,function(){lbusy=false},true);}
+  if(k<2&&ov.once&&ov.on){lbusy=true;decrypt(names[k],words[k],0,function(){lbusy=false},CITY);}
   else if(k===2&&fv.once&&fv.on){lbusy=true;heartIn(GSTEP*8,function(){lbusy=false});}
 },2600);
 })();
