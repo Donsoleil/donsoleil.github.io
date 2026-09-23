@@ -250,10 +250,11 @@ setInterval(function(){
 
 /* Offices and footer mark. Same decrypt as the client names: California and Dubai
    decrypt in when they scroll into view, the mark decrypts STUDIO14 and the heart
-   locks in last. After that, on the grid's 2.6 s beat, the cities and the heart
-   take turns to glitch and settle back. A city glitch is slower than the grid's:
-   the whole word scrambles for 0.9 s, then letters lock in 120 ms apart. */
-var CITY={all:true,hold:900,step:120,tick:70};
+   locks in last. After that both cities glitch together once per round, with 8 s
+   of rest between rounds, and the heart glitches on its own every 7.8 s. A city
+   glitch is slower than the grid's: the whole word scrambles for 0.9 s, then
+   letters lock in 120 ms apart. */
+var CITY={all:true,hold:900,step:120,tick:70},REST=8000;
 function seen2(el,cb){var st={on:false,once:false};
   if('IntersectionObserver' in window){new IntersectionObserver(function(es){st.on=es[0].isIntersecting;if(st.on&&!st.once){st.once=true;cb();}},{threshold:.3}).observe(el);}
   else{st.on=true;st.once=true;cb();}
@@ -265,14 +266,16 @@ mt.textContent='';hc.textContent='';
 function heartIn(delay,done){var t0=performance.now();
   var id=setInterval(function(){if(performance.now()-t0>=delay){clearInterval(id);hc.textContent='';hc.appendChild(heart);done&&done();return;}
     hc.textContent=GL[Math.floor(Math.random()*GL.length)];},TICK);}
-var ov=seen2(names[0].closest('.offices'),function(){names.forEach(function(n,i){setTimeout(function(){decrypt(n,words[i],0,null,CITY);},300+i*156);});});
+function round(){var left=names.length;
+  names.forEach(function(n,i){setTimeout(function(){decrypt(n,words[i],0,function(){if(!--left)setTimeout(next,REST);},CITY);},i*156);});}
+function next(){if(document.hidden||!ov.on){setTimeout(next,500);return;}round();}
+var ov=seen2(names[0].closest('.offices'),function(){setTimeout(round,300);});
 var fv=seen2(mark,function(){setTimeout(function(){decrypt(mt,mword,0);heartIn(mword.length*GSTEP);},300);});
-var beat=0,lbusy=false;
+var hbusy=false;
 setInterval(function(){
-  if(document.hidden||lbusy)return;var k=beat++%3;
-  if(k<2&&ov.once&&ov.on){lbusy=true;decrypt(names[k],words[k],0,function(){lbusy=false},CITY);}
-  else if(k===2&&fv.once&&fv.on){lbusy=true;heartIn(GSTEP*8,function(){lbusy=false});}
-},2600);
+  if(document.hidden||hbusy||!fv.once||!fv.on)return;
+  hbusy=true;heartIn(GSTEP*8,function(){hbusy=false});
+},7800);
 })();
 </script>
 </body></html>
